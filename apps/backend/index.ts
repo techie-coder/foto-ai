@@ -2,6 +2,7 @@ import express from 'express';
 import { trainModel, GenerateImage, GenerateImagesFromPack } from 'common/types';
 import { prismaClient } from 'db';
 import { FalAIModel } from './models/FalAIModel';
+import { S3Client } from 'bun';
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -10,6 +11,21 @@ app.use(express.json());
 const USER_ID = "123";
 
 const falAiModel = new FalAIModel();
+
+app.get("/pre-signed-url", async (req, res) => {
+    const key = `images/${Date.now()}_${Math.random()}.zip`;
+    const url = S3Client.presign(key,{
+        accessKeyId: process.env.S3_ACCESS_KEY,
+        secretAccessKey: process.env.S3_SECRET_KEY,
+        bucket: process.env.BUCKET_NAME,
+        expiresIn: 60*5
+    })
+
+    res.json({
+        url,
+        key
+    })
+})
 
 app.post("/ai/training", async (req, res) => {
     const parsedBody = trainModel.safeParse(req.body);
@@ -20,7 +36,7 @@ app.post("/ai/training", async (req, res) => {
         return 
     }
     
-    const {request_id, response_url} = await falAiModel.trainModel("", parsedBody.data.name)
+    const {request_id, response_url} = await falAiModel.trainModel(parsedBody.data.zipUrl, parsedBody.data.name)
 
     const data = await prismaClient.model.create({
         data: {
@@ -32,6 +48,7 @@ app.post("/ai/training", async (req, res) => {
             bald: parsedBody.data.bald,
             userId: USER_ID,
             falAiReuestId: request_id,
+            zipUrl: parsedBody.data.zipUrl,
         }
     })
 

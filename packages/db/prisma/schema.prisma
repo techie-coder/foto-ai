@@ -48,7 +48,7 @@ model User {
 }
 
 model Model {
-  id             String           @id @default(uuid())
+  id             String         @id @default(uuid())
   name           String
   type           ModelTypeEnum
   age            Int
@@ -58,21 +58,14 @@ model Model {
   userId         String
   triggerWord    String?
   tensorPath     String?
-  trainingStatus StatusTypes      @default(Pending)
-  trainingImages TrainingImages[]
+  trainingStatus StatusTypes    @default(Pending)
   outputImages   OutputImages[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   falAiReuestId  String?
+  zipUrl         String
 
   @@index([falAiReuestId])
-}
-
-model TrainingImages {
-  id       String  @id @default(uuid())
-  imageUrl String
-  Model    Model?  @relation(fields: [modelId], references: [id])
-  modelId  String?
 }
 
 model OutputImages {

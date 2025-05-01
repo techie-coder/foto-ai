@@ -16,7 +16,7 @@ export const trainModel = z.object({
     ]),
     eyeColor: z.enum(["Black", "Brown", "Blue", "Hazel", "Grey"]),
     bald: z.boolean(),
-    images: z.array(z.string())
+    zipUrl: z.string()
 })
 
 export const GenerateImage = z.object({
