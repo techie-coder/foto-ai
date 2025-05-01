@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ModelTypeEnum {
+  Man
+  Woman
+  Other
+}
+
+enum Ethnicity {
+  White
+  Black
+  Asian_American
+  East_Asian
+  South_East_Asian
+  South_Asian
+  Middle_Eastern
+  Pacific
+  Hispanic
+}
+
+enum EyeColor {
+  Black
+  Brown
+  Blue
+  Hazel
+  Grey
+}
+
+enum StatusTypes {
+  Pending
+  Completed
+  Failed
+}
+
+model User {
+  id             String   @id @default(uuid())
+  username       String
+  profilePicture String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Model {
+  id             String           @id @default(uuid())
+  name           String
+  type           ModelTypeEnum
+  age            Int
+  ethnicity      Ethnicity
+  eyeColor       EyeColor
+  bald           Boolean
+  userId         String
+  triggerWord    String?
+  tensorPath     String?
+  trainingStatus StatusTypes      @default(Pending)
+  trainingImages TrainingImages[]
+  outputImages   OutputImages[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  falAiReuestId  String?
+
+  @@index([falAiReuestId])
+}
+
+model TrainingImages {
+  id       String  @id @default(uuid())
+  imageUrl String
+  Model    Model?  @relation(fields: [modelId], references: [id])
+  modelId  String?
+}
+
+model OutputImages {
+  id            String      @id @default(uuid())
+  imageUrl      String      @default("")
+  modelId       String
+  userId        String
+  prompt        String
+  status        StatusTypes @default(Pending)
+  Model         Model?      @relation(fields: [modelId], references: [id])
+  falAiReuestId String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([falAiReuestId])
+}
+
+model Packs {
+  id      String        @id @default(uuid())
+  name    String
+  prompts PackPrompts[]
+}
+
+model PackPrompts {
+  id      String  @id @default(uuid())
+  prompt  String
+  packId  String
+  Packs   Packs?  @relation(fields: [packsId], references: [id])
+  packsId String?
+}
