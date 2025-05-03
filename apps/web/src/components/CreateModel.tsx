@@ -51,13 +51,13 @@ export const CreateModel = () => {
         const token = await getToken();
         if (token) {
             const response = await trainModel(input, token);
-            console.log("Response from training", response);
+            //console.log("Response from training", response);
         }
     }
 
     const onUpload = (url: string) => {
         setZipUrl(url);
-        console.log("Zip URL", url);
+        //console.log("Zip URL", url);
     }
 
     const router = useRouter();

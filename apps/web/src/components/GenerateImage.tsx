@@ -23,13 +23,31 @@ import { useEffect, useState } from "react"
 import type { GenerateImageInput } from "common/inferred"
 import { Textarea } from "./ui/textarea"
 
+type Model = {
+    id: string;
+    name: string;
+    type: string; // Replace with actual enum if available
+    age: number;
+    ethnicity: string; // Replace with actual enum if available
+    eyeColor: string;  // Replace with actual enum if available
+    bald: boolean;
+    userId: string;
+    triggerWord: string | null;
+    tensorPath: string | null;
+    trainingStatus: string; // Replace with actual enum if available
+    createdAt: string; // Or Date if you parse it
+    updatedAt: string;
+    falAiReuestId: string | null;
+    zipUrl: string;
+};
+
 export const GenerateImage = () => {
     const { getToken } = useAuth();
 
     const [prompt, setPrompt] = useState<GenerateImageInput["prompt"]>("");
     const [modelId, setModelId] = useState<GenerateImageInput["modelId"]>("");
 
-    const [createdModels, setCreatedModels] = useState<[]>([]);
+    const [createdModels, setCreatedModels] = useState<Model[]>([]);
     const input: GenerateImageInput = {
         prompt,
         modelId,
@@ -40,7 +58,7 @@ export const GenerateImage = () => {
         const token = await getToken();
         if (token) {
             const response = await generateImage(input, token);
-            console.log("Response from model", response);
+            //console.log("Response from model", response);
         }
     }
 
@@ -49,8 +67,8 @@ export const GenerateImage = () => {
             const token = await getToken();
             if (token) {
                 const response = await getModels(token);
-                console.log("Response from get model", response);
-                console.log(response.models);
+                //console.log("Response from get model", response);
+                //console.log(response.models);
                 setCreatedModels(response.models);
             }
         }
