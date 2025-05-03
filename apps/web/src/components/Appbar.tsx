@@ -1,17 +1,35 @@
+"use client"
 import {
     SignInButton,
-    SignUpButton,
     SignedIn,
     SignedOut,
     UserButton,
 } from '@clerk/nextjs'
 import { Button } from './ui/button'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 export const Appbar = () => {
+    const router = useRouter();
+
     return (
-        <div className="sticky bg-black z-100 flex justify-between p-4 border-b border-neutral-700">
-            <div className='text-xl text-white font-bold'>
-                foto-ai
+        <div className="absolute z-100 bg-transparent flex flex-row justify-between items-center p-4 border-neutral-700 w-full h-[10vh]">
+            <div className='text-xl text-white font-bold h-full'>
+                <button onClick={() => { router.push("/") }}>foto-ai</button>
+            </div>
+            <div className='flex justify-between flex-row gap-10 text-sm text-white'>
+                <div className="h-full group">
+                    <Link href="/train" className='block'>Get Started</Link>
+                    <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
+                </div>
+                <div className="h-full group">
+                    <Link href="/gallery" className='block'>Gallery</Link>
+                    <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
+                </div>
+                <div className="h-full group">
+                    <Link href="/pricing" className='block'>Pricing</Link>
+                    <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
+                </div>
             </div>
             <div>
                 <SignedOut>
