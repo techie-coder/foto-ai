@@ -19,7 +19,7 @@ export const Appbar = () => {
             </div>
             <div className='flex justify-between flex-row gap-10 text-sm text-white'>
                 <div className="h-full group">
-                    <Link href="/train" className='block'>Get Started</Link>
+                    <Link href="/dashboard" className='block'>Get Started</Link>
                     <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
                 </div>
                 <div className="h-full group">
@@ -33,7 +33,7 @@ export const Appbar = () => {
             </div>
             <div>
                 <SignedOut>
-                    <Button variant="ghost" className='bg-white text-black'><SignInButton /></Button>
+                    <Button className=" bg-white text-black rounded-2xl hover:bg-white hover:underline transition-transform duration-300"><SignInButton /></Button>
                 </SignedOut>
                 <SignedIn>
                     <UserButton />

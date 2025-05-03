@@ -20,7 +20,7 @@ export class FalAIModel extends BaseModel {
           });
         return { request_id, response_url };
         */
-       return { request_id: "123", response_url: "http://example.com" };         
+       return { request_id: "123", response_url: "http://example.com", tensorPath };         
     }
 
     public async trainModel(zipUrl: string, triggerWord: string) {
