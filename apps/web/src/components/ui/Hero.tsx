@@ -6,17 +6,16 @@ import { useRouter } from "next/navigation"
 
 export const Hero = () => {
     const router = useRouter();
-    const homeRef = useRef(null);
-    const toRef = useRef(null);
+    const homeRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        const moveGradient = (event) => {
+        const moveGradient = (event: MouseEvent) => {
             const minWidth = window.innerWidth;
             const minHeight = window.innerHeight;
             const mouseX = Math.round((event.pageX / minWidth) * 100);
             const mouseY = Math.round((event.pageY / minHeight) * 100);
 
-            if (homeRef) {
+            if (homeRef.current) {
                 homeRef.current.style.setProperty("--mouse-x", `${mouseX}%`);
                 homeRef.current.style.setProperty("--mouse-y", `${mouseY}%`);
             }
