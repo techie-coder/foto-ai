@@ -1,6 +1,8 @@
 import JSZip from "jszip";
 import axios from "axios";
-import { BACKEND_URL, CLOUDFLARE_OBJECT_KEY } from "./config";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const CLOUDFLARE_OBJECT_KEY = process.env.NEXT_PUBLIC_CLOUDFARE_OBJECT_KEY;
 
 export async function getZipUrl(files: File[]) {
   const zip = new JSZip();

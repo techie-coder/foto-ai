@@ -1,7 +1,8 @@
 import { TrainModelInput } from "common/inferred";
 import { GenerateImageInput } from "common/inferred";
 import axios from "axios";
-import { BACKEND_URL } from "./config";
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export async function trainModel(input: TrainModelInput, token: string) {
   const response = await axios.post(`${BACKEND_URL}/ai/training`, input, {
