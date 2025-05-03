@@ -6,16 +6,14 @@ import {
     UserButton,
 } from '@clerk/nextjs'
 import { Button } from './ui/button'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export const Appbar = () => {
-    const router = useRouter();
 
     return (
         <div className="absolute z-100 bg-transparent flex flex-row justify-between items-center p-4 border-neutral-700 w-full h-[10vh]">
             <div className='text-xl text-white font-bold h-full'>
-                <button onClick={() => { router.push("/") }}>foto-ai</button>
+                <Link href="/">foto-ai</Link>
             </div>
             <div className='flex justify-between flex-row gap-10 text-sm text-white'>
                 <div className="h-full group">

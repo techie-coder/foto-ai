@@ -87,7 +87,7 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
         return
     }
 
-    const {request_id, response_url} = await falAiModel.generateImage(parsedBody.data.prompt, model.tensorPath);
+    const {request_id, response_url, tensorPath} = await falAiModel.generateImage(parsedBody.data.prompt, model.tensorPath);
 
     const data = await prismaClient.outputImages.create({
         data: {
@@ -99,7 +99,8 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
         }
     })
     res.json({
-        imageId: data.id
+        imageId: data.id,
+        tensorPath
     })
 })
 
@@ -163,6 +164,24 @@ app.get("/image/bulk", authMiddleware, async (req, res) => {
     res.json({
         images: imagesData
     })  
+})
+
+app.get("/ai/models", authMiddleware, async (req, res) => {
+    const userId = req.userId;
+    try{
+        const models = await prismaClient.model.findMany({
+            where: {
+                userId: userId
+            }
+        })
+        res.json({
+            models
+        })
+    }catch(e){
+        res.json({
+            message: "Error fetching models"
+        })
+    }
 })
 
 app.post("/fal-ai/webhook/train", authMiddleware, async (req, res) => {

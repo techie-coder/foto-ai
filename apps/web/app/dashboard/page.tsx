@@ -8,7 +8,7 @@ import { useState } from "react";
 const Dashboard = () => {
 
     const [menuBar, setMenuBar] = useState<string>("Create Model");
-    const menuBarItems = ["Create Model", "Generate Image", "Packs", "Saved"];
+    const menuBarItems = ["Create Model", "Generate Image", "Packs", "Library"];
 
     return (
         <>

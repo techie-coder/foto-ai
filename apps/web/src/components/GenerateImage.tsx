@@ -17,19 +17,19 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Upload } from "@/components/ui/upload"
-import { generateImage } from "@/lib/api"
+import { generateImage, getModels } from "@/lib/api"
 import { useAuth } from "@clerk/nextjs"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { GenerateImageInput } from "common/inferred"
 import { Textarea } from "./ui/textarea"
 
-
 export const GenerateImage = () => {
     const { getToken } = useAuth();
+
     const [prompt, setPrompt] = useState<GenerateImageInput["prompt"]>("");
     const [modelId, setModelId] = useState<GenerateImageInput["modelId"]>("");
 
+    const [createdModels, setCreatedModels] = useState<[]>([]);
     const input: GenerateImageInput = {
         prompt,
         modelId,
@@ -44,14 +44,23 @@ export const GenerateImage = () => {
         }
     }
 
-    const onUpload = (url: string) => {
-
-    }
+    useEffect(() => {
+        const getUserModels = async () => {
+            const token = await getToken();
+            if (token) {
+                const response = await getModels(token);
+                console.log("Response from get model", response);
+                console.log(response.models);
+                setCreatedModels(response.models);
+            }
+        }
+        getUserModels();
+    }, [])
 
     const router = useRouter();
 
     return (
-        <Card className="w-full max-h-full overflow-auto dark">
+        <Card className="w-full flex justify-center max-h-[50vh] overflow-auto dark">
             <CardHeader>
                 <CardTitle>Generate an Image</CardTitle>
                 <CardDescription>Geerate an image in one-click</CardDescription>
@@ -65,22 +74,20 @@ export const GenerateImage = () => {
                     <div className="flex flex-col space-y-1.5 w-full">
                         <Label htmlFor="Gender">Model</Label>
                         <Select onValueChange={(value: GenerateImageInput["modelId"]) => { setModelId(value) }}>
-                            <SelectTrigger id="Type">
-                                <SelectValue placeholder="Type of the model" />
+                            <SelectTrigger id="Model">
+                                <SelectValue placeholder="Name of the model" />
                             </SelectTrigger>
                             <SelectContent position="popper">
-                                <SelectItem value="Man">Man</SelectItem>
-                                <SelectItem value="Woman">Woman</SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
+                                {createdModels ?
+                                    createdModels.map((item, index) => (<SelectItem key={index} value={item?.id}>{item?.name}</SelectItem>)) : (<SelectItem value="null">No models found</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
-                    <Upload onUpload={onUpload} />
                 </div>
             </CardContent>
             <CardFooter className="flex justify-between">
                 <Button onClick={() => { router.push("/") }}>Cancel</Button>
-                <Button onClick={handleSubmit} disabled={!prompt || !modelId}>Create Model</Button>
+                <Button onClick={handleSubmit} disabled={!prompt || !modelId}>Generate</Button>
             </CardFooter>
         </Card>
     )

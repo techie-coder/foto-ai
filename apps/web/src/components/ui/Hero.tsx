@@ -34,7 +34,7 @@ export const Hero = () => {
             filter: contrast(370%) brightness(100%);
             background: 
                 linear-gradient(128deg, rgba(230,35,35,0.69), rgba(54,150,150,0.45)),
-                radial-gradient(at var(--mouse-x) var(--mouse-y), rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
+                radial-gradient(at var(--mouse-x, 40%) var(--mouse-y, 35%), rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0.5)),
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4.3' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             width: 100dvw ;
             height: 100dvh;
