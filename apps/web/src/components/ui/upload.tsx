@@ -27,8 +27,8 @@ export function Upload({ onUpload }: { onUpload: (url: string) => void }) {
                     input.type = "file";
                     input.accept = "image/*";
                     input.multiple = true;
-                    input.onchange = async (e) => {
-                        const files = e.target.files;
+                    input.onchange = async (e: Event) => {
+                        const files = (e.target as HTMLInputElement).files;
                         if (files) {
                             console.log(files);
                             setImages(Array.from(files));
