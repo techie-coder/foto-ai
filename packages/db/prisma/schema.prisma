@@ -90,9 +90,8 @@ model Packs {
 }
 
 model PackPrompts {
-  id      String  @id @default(uuid())
-  prompt  String
-  packId  String
-  Packs   Packs?  @relation(fields: [packsId], references: [id])
-  packsId String?
+  id     String @id @default(uuid())
+  prompt String
+  packId String
+  Packs  Packs? @relation(fields: [packId], references: [id])
 }

@@ -13,9 +13,13 @@
   },
   "dependencies": {
     "@fal-ai/client": "^1.4.0",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
     "common": "*",
+    "cors": "^2.8.5",
     "db": "*",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
