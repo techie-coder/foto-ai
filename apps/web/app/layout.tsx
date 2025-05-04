@@ -4,7 +4,6 @@ import {
 } from '@clerk/nextjs'
 import localFont from "next/font/local";
 import "./globals.css";
-import { Appbar } from "@/components/Appbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",

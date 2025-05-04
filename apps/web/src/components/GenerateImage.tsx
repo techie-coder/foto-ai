@@ -26,16 +26,16 @@ import { Textarea } from "./ui/textarea"
 type Model = {
     id: string;
     name: string;
-    type: string; // Replace with actual enum if available
+    type: string;
     age: number;
-    ethnicity: string; // Replace with actual enum if available
-    eyeColor: string;  // Replace with actual enum if available
+    ethnicity: string;
+    eyeColor: string;
     bald: boolean;
     userId: string;
     triggerWord: string | null;
     tensorPath: string | null;
-    trainingStatus: string; // Replace with actual enum if available
-    createdAt: string; // Or Date if you parse it
+    trainingStatus: string;
+    createdAt: string;
     updatedAt: string;
     falAiReuestId: string | null;
     zipUrl: string;
@@ -58,7 +58,7 @@ export const GenerateImage = () => {
         const token = await getToken();
         if (token) {
             const response = await generateImage(input, token);
-            //console.log("Response from model", response);
+            console.log("Response from model", response);
         }
     }
 

@@ -3,12 +3,29 @@ import { Button } from "@/components/ui/button"
 import { Appbar } from "@/components/Appbar"
 import { CreateModel } from "@/components/CreateModel"
 import { GenerateImage } from "@/components/GenerateImage"
-import { useState } from "react";
+import { Images } from "@/components/Images"
+import { useEffect, useState } from "react";
+import { getImagesBulk } from "@/lib/api"
+import { useAuth } from "@clerk/nextjs"
+import type { OutputImages } from "common/inferred"
+import { get } from "http"
 
 const Dashboard = () => {
 
+    const { getToken } = useAuth();
     const [menuBar, setMenuBar] = useState<string>("Create Model");
     const menuBarItems = ["Create Model", "Generate Image", "Packs", "Library"];
+    const [images, setImages] = useState<OutputImages[]>([]);
+    useEffect(() => {
+        const getImages = async () => {
+            const token = await getToken();
+            if (!token) return;
+            const response = await getImagesBulk(token);
+            console.log(response);
+            setImages(response.images);
+        }
+        getImages();
+    }, [])
 
     return (
         <>
@@ -23,6 +40,7 @@ const Dashboard = () => {
                             {menuBarItems.map((item, index) => (<Button key={index} onClick={() => setMenuBar(item)} className={menuBar === item ? "text-white bg-neutral-700 rounded-md" : "text-white bg-neutral-800 hover:bg-neutral-700 rounded-md"}>{item}</Button>))}
                         </div>
                     </div>
+                    <Images images={images} />
                 </div>
             </div>
         </>

@@ -30,4 +30,13 @@ export const GenerateImagesFromPack = z.object({
     packId: z.string()
 })
 
-
+export const OutputImages = z.object({
+    id : z.string(),           
+  imageUrl: z.string(),      
+  modelId: z.string(),       
+  userId:  z.string(),       
+  prompt: z.string(),
+  status: z.enum(["Pending", "Completed", "Failed"]),
+  Model: trainModel,         
+  falAiReuestId: z.string() 
+})

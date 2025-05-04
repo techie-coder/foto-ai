@@ -9,7 +9,6 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
         const decoded = jwt.decode(token, process.env.CLERK_JWT_KEY, {
             algorithms: ['RS256']
         })
-        console.log(decoded);
         if (decoded?.sub){
             req.userId = decoded?.sub;
             next()

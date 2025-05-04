@@ -4,7 +4,7 @@ import { prismaClient } from 'db';
 import { FalAIModel } from './models/FalAIModel';
 import { S3Client } from 'bun';
 import cors from 'cors';
-import { authMiddleware } from './authMiddleware';
+import { authMiddleware } from './middleware/authMiddleware';
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -73,35 +73,42 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
         })
         return
     }
-
-    const model = await prismaClient.model.findUnique({
-        where: {
-            id: parsedBody.data.modelId
-        }
-    })
-
-    if(!model || !model.tensorPath){
-        res.status(411).json({
-            "message": "Model not found!"
+    try{
+        const model = await prismaClient.model.findUnique({
+            where: {
+                id: parsedBody.data.modelId
+            }
         })
-        return
-    }
 
-    const {request_id, response_url, tensorPath} = await falAiModel.generateImage(parsedBody.data.prompt, model.tensorPath);
-
-    const data = await prismaClient.outputImages.create({
-        data: {
-            prompt: parsedBody.data.prompt,
-            userId: req.userId,
-            modelId: parsedBody.data.modelId,
-            imageUrl: "",
-            falAiReuestId: request_id,
+        if(!model || !model.tensorPath){
+            res.status(411).json({
+                "message": "Model not found!"
+            })
+            return
         }
-    })
-    res.json({
-        imageId: data.id,
-        tensorPath
-    })
+        const triggerWord = model.triggerWord;
+        const prompt = parsedBody.data.prompt === "test_prompt" ? parsedBody.data.prompt : (parsedBody.data.prompt+ triggerWord);
+
+        const {request_id } = await falAiModel.generateImage(prompt, model.tensorPath);
+        console.log("Request ID", request_id);
+        const data = await prismaClient.outputImages.create({
+            data: {
+                prompt: parsedBody.data.prompt,
+                userId: req.userId,
+                modelId: parsedBody.data.modelId,
+                imageUrl: "",
+                falAiReuestId: request_id,
+            }
+        })
+        res.json({
+            imageId: data.id,
+        })
+    }catch(e){
+        console.log("Error generating image");
+        res.json({
+            message: "Error generating image"
+        })
+    }
 })
 
 app.post("/pack/generate", authMiddleware, async (req, res) => {
@@ -149,13 +156,11 @@ app.get("/pack/bulk", authMiddleware, async (req, res) => {
 })
 
 app.get("/image/bulk", authMiddleware, async (req, res) => {
-    const ids = req.query.ids as string[];
-    const limit = req.query.limit as string ?? "2";
+    const limit = req.query.limit as string ?? "10";
     const offset = req.query.offset as string ?? "0";
 
     const imagesData = await prismaClient.outputImages.findMany({
         where: {
-            id: { in: ids },
             userId: req.userId
         },
         skip: parseInt(offset),
@@ -186,7 +191,6 @@ app.get("/ai/models", authMiddleware, async (req, res) => {
 
 app.post("/fal-ai/webhook/train", authMiddleware, async (req, res) => {
     const request_id = req.body.request_id as string;
-
     await prismaClient.model.updateMany({
         where:{
             falAiReuestId: request_id
@@ -201,19 +205,26 @@ app.post("/fal-ai/webhook/train", authMiddleware, async (req, res) => {
     })    
 });
 
-app.post("/fal-ai/webhook/image", authMiddleware, async (req, res) => {
+app.post("/fal-ai/webhook/image", async (req, res) => {
     const request_id = req.body.request_id as string;
-    await prismaClient.outputImages.updateMany({
-        where:{
-            falAiReuestId: request_id
-        },
-        data: {
-            status: "Completed",
-            imageUrl: req.body.image_url
+    console.log(req.body);
+    if (req.body.status === "OK") {
+        if(req.body.payload.images) {
+        const images = req.body.payload.images;
+        const imageUrl = images[0].url;
+        await prismaClient.outputImages.updateMany({
+            where:{
+                falAiReuestId: request_id
+            },
+            data: {
+                status: "Completed",
+                imageUrl: imageUrl
+            }
+        })
         }
-    })
+    }
     res.json({
-        message: "Image generation completed"
+        image_url : req.body.payload.images[0].url,
     })
 });
 

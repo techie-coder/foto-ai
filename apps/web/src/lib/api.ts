@@ -14,7 +14,7 @@ export async function trainModel(input: TrainModelInput, token: string) {
 }
 
 export async function generateImage(input: GenerateImageInput , token: string) {
-  if(input.modelId === "null") return
+  if(input.modelId === "null" || !token) return
   const response = await axios.post(`${BACKEND_URL}/ai/generate`, input, {
     headers: {
       authorization: `Bearer ${token}`
@@ -25,6 +25,15 @@ export async function generateImage(input: GenerateImageInput , token: string) {
 
 export const getModels = async (token: string) => {
   const response = await axios.get(`${BACKEND_URL}/ai/models`, {
+    headers: {
+      authorization: `Bearer ${token}`
+    }
+  });
+  return response.data;
+}
+
+export const getImagesBulk = async (token: string) => {
+  const response = await axios.get(`${BACKEND_URL}/image/bulk`, {
     headers: {
       authorization: `Bearer ${token}`
     }
