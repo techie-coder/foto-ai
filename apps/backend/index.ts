@@ -5,6 +5,7 @@ import { FalAIModel } from './models/FalAIModel';
 import { S3Client } from 'bun';
 import cors from 'cors';
 import { authMiddleware } from './middleware/authMiddleware';
+import { falMiddleware } from './middleware/falMiddleware';
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -189,7 +190,7 @@ app.get("/ai/models", authMiddleware, async (req, res) => {
     }
 })
 
-app.post("/fal-ai/webhook/train", authMiddleware, async (req, res) => {
+app.post("/fal-ai/webhook/train", async (req, res) => {
     const request_id = req.body.request_id as string;
     await prismaClient.model.updateMany({
         where:{
