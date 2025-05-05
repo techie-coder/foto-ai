@@ -19,6 +19,34 @@ export const trainModel = z.object({
     zipUrl: z.string()
 })
 
+export const Model = z.object({
+    id: z.string(),
+    name: z.string(),
+    type: z.enum(["Man", "Woman", "Other"]),
+    age: z.number(),
+    ethnicity: z.enum(["White",
+        "Black",
+        "Asian_American",
+        "East_Asian",
+        "South_East_Asian",
+        "South_Asian",
+        "Middle_Eastern",
+        "Pacific",
+        "Hispanic"
+    ]),
+    eyeColor: z.enum(["Black", "Brown", "Blue", "Hazel", "Grey"]),
+    bald: z.boolean(),
+    zipUrl: z.string(),
+    thumbnailUrl: z.string(),
+    public: z.boolean(),
+    trainingStatus: z.enum(["Pending", "Completed", "Failed"]),
+    tensorPath: z.string(),
+    triggerWord: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+    falAiRequestId: z.string().nullable(),
+})
+
 export const GenerateImage = z.object({
     prompt: z.string(),
     modelId: z.string(),

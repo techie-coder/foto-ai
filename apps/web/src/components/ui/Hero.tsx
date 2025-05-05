@@ -28,6 +28,7 @@ export const Hero = () => {
 
     return (
         <>
+            {/* @eslint ignore */}
             <style jsx>{`
             .hero {
             filter: contrast(370%) brightness(100%);

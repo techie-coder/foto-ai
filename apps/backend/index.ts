@@ -147,13 +147,17 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
 })
 
 app.get("/pack/bulk", authMiddleware, async (req, res) => {
-    
-    const packs = await prismaClient.packs.findMany({});
-
-    res.json({
-        packs
-    })
-
+    try{
+        const packs = await prismaClient.packs.findMany({});
+        res.json({
+            packs
+        })
+    }
+    catch(e){
+        res.json({
+            error: "Error fetching packs"
+        })
+    }
 })
 
 app.get("/image/bulk", authMiddleware, async (req, res) => {
@@ -177,7 +181,14 @@ app.get("/ai/models", authMiddleware, async (req, res) => {
     try{
         const models = await prismaClient.model.findMany({
             where: {
-                userId: userId
+                OR: [
+                    {
+                        userId: userId  
+                    },
+                    {
+                        public: true
+                    }
+                ]
             }
         })
         res.json({

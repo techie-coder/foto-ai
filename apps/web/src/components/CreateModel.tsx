@@ -63,80 +63,83 @@ export const CreateModel = () => {
     const router = useRouter();
 
     return (
-        <Card className="w-full max-h-full overflow-auto dark">
-            <CardHeader>
-                <CardTitle>Create a model</CardTitle>
-                <CardDescription>Create a new model in one-click.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="grid w-full items-center gap-4">
-                    <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" placeholder="Name of your model" onChange={(e) => { setName(e.target.value) }} />
+        <>
+            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
+            <Card className="fixed z-9999 w-[50dvw] h-[80vh] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto dark backdrop-brightness-50">
+                <CardHeader>
+                    <CardTitle>Create a model</CardTitle>
+                    <CardDescription>Create a new model in one-click.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid w-full items-center gap-4">
+                        <div className="flex flex-col space-y-1.5">
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" placeholder="Name of your model" onChange={(e) => { setName(e.target.value) }} />
+                        </div>
+                        <div className="flex flex-col space-y-1.5 w-full">
+                            <Label htmlFor="Gender">Type</Label>
+                            <Select onValueChange={(value: TrainModelInput["type"]) => { setType(value) }}>
+                                <SelectTrigger id="Type">
+                                    <SelectValue placeholder="Type of the model" />
+                                </SelectTrigger>
+                                <SelectContent position="popper">
+                                    <SelectItem value="Man">Man</SelectItem>
+                                    <SelectItem value="Woman">Woman</SelectItem>
+                                    <SelectItem value="Other">Other</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex flex-col space-y-1.5">
+                            <Label htmlFor="name">Age</Label>
+                            <Input id="name" type="number" placeholder="Age of your model" onChange={(e) => { setAge(parseInt(e.target.value) || 0) }} />
+                        </div>
+                        <div className="flex flex-col space-y-1.5 w-full">
+                            <Label htmlFor="ethnicity">Ethnicity</Label>
+                            <Select onValueChange={(value: TrainModelInput["ethnicity"]) => { setEthnicity(value) }
+                            }>
+                                <SelectTrigger id="framework">
+                                    <SelectValue placeholder="Ethnicity of the model" />
+                                </SelectTrigger>
+                                <SelectContent position="popper">
+                                    <SelectItem value="White">White</SelectItem>
+                                    <SelectItem value="Black">Black</SelectItem>
+                                    <SelectItem value="Asian_American">Asian American</SelectItem>
+                                    <SelectItem value="East_Asian">East Asian</SelectItem>
+                                    <SelectItem value="South_East_Asian">South East Asian</SelectItem>
+                                    <SelectItem value="South_Asian">South Asian</SelectItem>
+                                    <SelectItem value="Middle_Eastern">Middle Eastern</SelectItem>
+                                    <SelectItem value="Hispanic">Hispanic</SelectItem>
+                                    <SelectItem value="Pacific">Pacific</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex flex-col space-y-1.5 w-full">
+                            <Label htmlFor="eyeColor">Eye Color</Label>
+                            <Select onValueChange={(value: TrainModelInput["eyeColor"]) => { setEyeColor(value) }}>
+                                <SelectTrigger id="eyeColor">
+                                    <SelectValue placeholder="Eye color of the model" />
+                                </SelectTrigger>
+                                <SelectContent position="popper">
+                                    <SelectItem value="Black">Black</SelectItem>
+                                    <SelectItem value="Brown">Brown</SelectItem>
+                                    <SelectItem value="Blue">Blue</SelectItem>
+                                    <SelectItem value="Hazel">Hazel</SelectItem>
+                                    <SelectItem value="Grey">Grey</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex flex-col space-y-1.5 w-full">
+                            <Label htmlFor="bald">Bald</Label>
+                            <Switch onClick={() => { setBald(!bald) }} />
+                        </div>
+                        <Upload onUpload={onUpload} />
                     </div>
-                    <div className="flex flex-col space-y-1.5 w-full">
-                        <Label htmlFor="Gender">Type</Label>
-                        <Select onValueChange={(value: TrainModelInput["type"]) => { setType(value) }}>
-                            <SelectTrigger id="Type">
-                                <SelectValue placeholder="Type of the model" />
-                            </SelectTrigger>
-                            <SelectContent position="popper">
-                                <SelectItem value="Man">Man</SelectItem>
-                                <SelectItem value="Woman">Woman</SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="flex flex-col space-y-1.5">
-                        <Label htmlFor="name">Age</Label>
-                        <Input id="name" type="number" placeholder="Age of your model" onChange={(e) => { setAge(parseInt(e.target.value) || 0) }} />
-                    </div>
-                    <div className="flex flex-col space-y-1.5 w-full">
-                        <Label htmlFor="ethnicity">Ethnicity</Label>
-                        <Select onValueChange={(value: TrainModelInput["ethnicity"]) => { setEthnicity(value) }
-                        }>
-                            <SelectTrigger id="framework">
-                                <SelectValue placeholder="Ethnicity of the model" />
-                            </SelectTrigger>
-                            <SelectContent position="popper">
-                                <SelectItem value="White">White</SelectItem>
-                                <SelectItem value="Black">Black</SelectItem>
-                                <SelectItem value="Asian_American">Asian American</SelectItem>
-                                <SelectItem value="East_Asian">East Asian</SelectItem>
-                                <SelectItem value="South_East_Asian">South East Asian</SelectItem>
-                                <SelectItem value="South_Asian">South Asian</SelectItem>
-                                <SelectItem value="Middle_Eastern">Middle Eastern</SelectItem>
-                                <SelectItem value="Hispanic">Hispanic</SelectItem>
-                                <SelectItem value="Pacific">Pacific</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="flex flex-col space-y-1.5 w-full">
-                        <Label htmlFor="eyeColor">Eye Color</Label>
-                        <Select onValueChange={(value: TrainModelInput["eyeColor"]) => { setEyeColor(value) }}>
-                            <SelectTrigger id="eyeColor">
-                                <SelectValue placeholder="Eye color of the model" />
-                            </SelectTrigger>
-                            <SelectContent position="popper">
-                                <SelectItem value="Black">Black</SelectItem>
-                                <SelectItem value="Brown">Brown</SelectItem>
-                                <SelectItem value="Blue">Blue</SelectItem>
-                                <SelectItem value="Hazel">Hazel</SelectItem>
-                                <SelectItem value="Grey">Grey</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                    <div className="flex flex-col space-y-1.5 w-full">
-                        <Label htmlFor="bald">Bald</Label>
-                        <Switch onClick={() => { setBald(!bald) }} />
-                    </div>
-                    <Upload onUpload={onUpload} />
-                </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-                <Button onClick={() => { router.push("/") }}>Cancel</Button>
-                <Button onClick={handleSubmit} disabled={!type || !ethnicity || !eyeColor || !name || !age || !zipUrl}>Create Model</Button>
-            </CardFooter>
-        </Card>
+                </CardContent>
+                <CardFooter className="flex justify-between">
+                    <Button onClick={() => { router.push("/") }}>Cancel</Button>
+                    <Button onClick={handleSubmit} disabled={!type || !ethnicity || !eyeColor || !name || !age || !zipUrl}>Create Model</Button>
+                </CardFooter>
+            </Card>
+        </>
     )
 }
