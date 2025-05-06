@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Appbar } from "@/components/Appbar"
 import { CreateModel } from "@/components/CreateModel"
 import { Models } from "@/components/Models"
-import { Images } from "@/components/Images"
+import { Packs } from "@/components/Packs"
 import { useEffect, useState } from "react";
 import { getImagesBulk } from "@/lib/api"
 import { RedirectToSignIn, SignedOut, SignedIn, useAuth } from "@clerk/nextjs"
@@ -44,6 +44,7 @@ const Dashboard = () => {
                         </div>
                         {menuBar === "Create Model" && <CreateModel />}
                         {menuBar === "Models" && <Models />}
+                        {menuBar === "Packs" && <Packs />}
                     </div>
                 </div>
             </SignedIn>

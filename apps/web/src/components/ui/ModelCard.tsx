@@ -27,7 +27,7 @@ export const ModelCard = ({ modelProps }: { modelProps: Model }) => {
         }
     }
 
-    const modelDesciption = `${modelProps.name}, a ${modelProps.age}-year-old ${modelProps.ethnicity} ${modelProps.type.toLowerCase()} with ${modelProps.eyeColor.toLowerCase()} eyes${modelProps.bald ? ", and is bald." : "."}`
+    const modelDesciption = `${modelProps.name}, a ${modelProps.age}-year-old ${modelProps.ethnicity.replace(/_/g, " ")} ${modelProps.type.toLowerCase()} with ${modelProps.eyeColor.toLowerCase()} eyes${modelProps.bald ? ", and is bald." : "."}`
     console.log(modelProps.thumbnailUrl);
     return (
         <>

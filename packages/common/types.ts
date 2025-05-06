@@ -1,3 +1,4 @@
+import { idText } from "typescript";
 import { z } from "zod";
 
 export const trainModel = z.object({
@@ -67,4 +68,18 @@ export const OutputImages = z.object({
   status: z.enum(["Pending", "Completed", "Failed"]),
   Model: trainModel,         
   falAiReuestId: z.string() 
+})
+
+export const PackPrompt = z.object({
+    id: z.string(),
+    prompt: z.string(),
+    packId: z.string(),
+})
+
+export const Pack = z.object({
+    id: z.string(),
+    name: z.string(),
+    imageUrl1: z.string(),
+    imageUrl2: z.string(),
+    PackPrompts: z.array(PackPrompt)
 })
