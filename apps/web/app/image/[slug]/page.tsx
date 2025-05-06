@@ -61,7 +61,7 @@ export default function Page({
     );
 };
 
-export const Tag = ({ title, value }: { title: string, value: string }) => {
+const Tag = ({ title, value }: { title: string, value: string }) => {
     return (
         <div className='flex flex-row w-fit h-10 bg-zinc-800 rounded-md items-center justify-center gap-2 p-2'>
             <span className='text-white text-sm font-bold'>{title}</span>
