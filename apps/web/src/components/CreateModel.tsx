@@ -1,5 +1,4 @@
 "use client"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
     Card,
@@ -25,9 +24,7 @@ import { TrainModelInput } from "common/inferred"
 import { useAuth } from "@clerk/nextjs"
 import { useState } from "react"
 
-
-
-export const CreateModel = () => {
+export const CreateModel = ({ onCancel }: { onCancel: () => void }) => {
     const { getToken } = useAuth();
     const [type, setType] = useState<TrainModelInput["type"]>("Man");
     const [age, setAge] = useState<TrainModelInput["age"]>(0);
@@ -60,47 +57,45 @@ export const CreateModel = () => {
         //console.log("Zip URL", url);
     }
 
-    const router = useRouter();
 
     return (
         <>
-            <div className="fixed inset-0 bg-black bg-opacity-50 z-40" />
-            <Card className="fixed z-9999 w-[50dvw] h-[80vh] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 overflow-auto dark backdrop-brightness-50">
+            <Card className="w-[40dvw] h-[80vh] overflow-auto dark border-2 border-cyan-400">
                 <CardHeader>
                     <CardTitle>Create a model</CardTitle>
                     <CardDescription>Create a new model in one-click.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid w-full items-center gap-4">
-                        <div className="flex flex-col space-y-1.5">
+                    <div className="relative grid w-full items-center gap-4">
+                        <div className="relative flex flex-col space-y-1.5">
                             <Label htmlFor="name">Name</Label>
                             <Input id="name" placeholder="Name of your model" onChange={(e) => { setName(e.target.value) }} />
                         </div>
-                        <div className="flex flex-col space-y-1.5 w-full">
+                        <div className="relative flex flex-col space-y-1.5 w-full">
                             <Label htmlFor="Gender">Type</Label>
                             <Select onValueChange={(value: TrainModelInput["type"]) => { setType(value) }}>
                                 <SelectTrigger id="Type">
                                     <SelectValue placeholder="Type of the model" />
                                 </SelectTrigger>
-                                <SelectContent position="popper">
+                                <SelectContent position="item-aligned">
                                     <SelectItem value="Man">Man</SelectItem>
                                     <SelectItem value="Woman">Woman</SelectItem>
                                     <SelectItem value="Other">Other</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="flex flex-col space-y-1.5">
+                        <div className="relative flex flex-col space-y-1.5">
                             <Label htmlFor="name">Age</Label>
                             <Input id="name" type="number" placeholder="Age of your model" onChange={(e) => { setAge(parseInt(e.target.value) || 0) }} />
                         </div>
-                        <div className="flex flex-col space-y-1.5 w-full">
+                        <div className="relative flex flex-col space-y-1.5 w-full">
                             <Label htmlFor="ethnicity">Ethnicity</Label>
                             <Select onValueChange={(value: TrainModelInput["ethnicity"]) => { setEthnicity(value) }
                             }>
                                 <SelectTrigger id="framework">
                                     <SelectValue placeholder="Ethnicity of the model" />
                                 </SelectTrigger>
-                                <SelectContent position="popper">
+                                <SelectContent position="item-aligned">
                                     <SelectItem value="White">White</SelectItem>
                                     <SelectItem value="Black">Black</SelectItem>
                                     <SelectItem value="Asian_American">Asian American</SelectItem>
@@ -113,13 +108,13 @@ export const CreateModel = () => {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="flex flex-col space-y-1.5 w-full">
+                        <div className="relative flex flex-col space-y-1.5 w-full">
                             <Label htmlFor="eyeColor">Eye Color</Label>
                             <Select onValueChange={(value: TrainModelInput["eyeColor"]) => { setEyeColor(value) }}>
                                 <SelectTrigger id="eyeColor">
                                     <SelectValue placeholder="Eye color of the model" />
                                 </SelectTrigger>
-                                <SelectContent position="popper">
+                                <SelectContent position="item-aligned">
                                     <SelectItem value="Black">Black</SelectItem>
                                     <SelectItem value="Brown">Brown</SelectItem>
                                     <SelectItem value="Blue">Blue</SelectItem>
@@ -128,7 +123,7 @@ export const CreateModel = () => {
                                 </SelectContent>
                             </Select>
                         </div>
-                        <div className="flex flex-col space-y-1.5 w-full">
+                        <div className="relative flex flex-col space-y-1.5 w-full">
                             <Label htmlFor="bald">Bald</Label>
                             <Switch onClick={() => { setBald(!bald) }} />
                         </div>
@@ -136,7 +131,7 @@ export const CreateModel = () => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-between">
-                    <Button onClick={() => { router.push("/") }}>Cancel</Button>
+                    <Button onClick={onCancel}>Cancel</Button>
                     <Button onClick={handleSubmit} disabled={!type || !ethnicity || !eyeColor || !name || !age || !zipUrl}>Create Model</Button>
                 </CardFooter>
             </Card>

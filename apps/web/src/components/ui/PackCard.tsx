@@ -34,12 +34,15 @@ export const PackCard = ({ PackProps, models }: { PackProps: Pack, models: Model
             <div className="flex flex-col gap-2 justify-center items-center">
                 <h1 className="text-white text-xl font-bold">{PackProps.name}</h1>
                 {generate && (
-                    <div className='grid grid-cols-5 gap-2 justify-center items-center w-full h-full'>
-                        {models.length > 0 && models.map((model, index) => (
-                            <ClickableImage key={index} modelProps={model} handleModel={() => setCurrentModel(model)} />
-                        ))}
-                    </div>)}
-                <button className='bg-black border border-cyan-400 text-white rounded-md w-24' onClick={() => { setGenerate(true); handleSubmit(); }}>Generate</button>
+                    <>
+                        <p className='text-sm text-white text-start'>Choose model :</p>
+                        <div className='grid grid-cols-5 gap-2 justify-center items-center w-full h-full'>
+                            {models.length > 0 && models.map((model, index) => (
+                                <ClickableImage key={index} modelProps={model} handleModel={() => setCurrentModel(model)} />
+                            ))}
+                        </div>
+                    </>)}
+                <button className='bg-black border border-cyan-400 text-white rounded-md w-24 p-2' onClick={() => { setGenerate(true); handleSubmit(); }}>Generate</button>
             </div>
         </div>
     )

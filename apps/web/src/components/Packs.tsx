@@ -3,11 +3,13 @@ import { useAuth } from "@clerk/nextjs";
 import { getPacksBulk, getModels } from "@/lib/api";
 import type { Pack, Model } from "common/inferred";
 import { PackCard } from "./ui/PackCard";
+import { SkeletonDemo } from "./ui/SkeletonDemo";
 
 export const Packs = () => {
     const { getToken } = useAuth();
     const [packs, setPacks] = useState<Pack[]>([]);
     const [models, setModels] = useState<Model[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const getPacks = async () => {
@@ -15,6 +17,7 @@ export const Packs = () => {
             if (!token) return;
             const response = await getPacksBulk(token);
             setPacks(response.packs);
+            setLoading(false);
         }
         getPacks();
     }, [])
@@ -28,6 +31,8 @@ export const Packs = () => {
         }
         handleGetModels();
     }, [])
+
+    if (loading) return <SkeletonDemo />
 
     return (
         <div className="grid grid-cols-3 gap-5 w-[90dvw] h-full p-4 overflow-auto">

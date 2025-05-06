@@ -8,12 +8,15 @@ import { useEffect, useState } from "react";
 import { getImagesBulk } from "@/lib/api"
 import { RedirectToSignIn, SignedOut, SignedIn, useAuth } from "@clerk/nextjs"
 import type { OutputImages } from "common/inferred"
+import { Gallery } from "@/components/Gallery"
+import { SkeletonDemo } from "@/components/ui/SkeletonDemo"
 
 const Dashboard = () => {
     const { getToken } = useAuth();
-    const [menuBar, setMenuBar] = useState<string>("");
-    const menuBarItems = ["Create Model", "Models", "Packs", "Library"];
+    const [menuBar, setMenuBar] = useState<string>("Gallery");
+    const menuBarItems = ["Gallery", "Generate", "Create Model", "Packs"];
     const [images, setImages] = useState<OutputImages[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     useEffect(() => {
         const getImages = async () => {
             const token = await getToken();
@@ -21,6 +24,7 @@ const Dashboard = () => {
             const response = await getImagesBulk(token);
             console.log(response);
             setImages(response.images);
+            setLoading(false);
         }
         getImages();
     }, [])
@@ -28,7 +32,7 @@ const Dashboard = () => {
     return (
         <>
             <SignedIn>
-                <div className="h-screen bg-zinc-950 w-full">
+                <div className="min-h-screen bg-zinc-950 w-full">
                     <Appbar />
                     <div className="flex flex-col items-center justify-center w-full pt-20">
                         <div className="flex flex-row items-center justify-center w-full h-16 gap-2">
@@ -42,9 +46,10 @@ const Dashboard = () => {
                                 </Button>
                             ))}
                         </div>
-                        {menuBar === "Create Model" && <CreateModel />}
-                        {menuBar === "Models" && <Models />}
+                        {menuBar === "Create Model" && <CreateModel onCancel={() => setMenuBar("")} />}
+                        {menuBar === "Generate" && <Models />}
                         {menuBar === "Packs" && <Packs />}
+                        {menuBar === "Gallery" && (loading ? <SkeletonDemo /> : <Gallery images={images} />)}
                     </div>
                 </div>
             </SignedIn>
@@ -56,3 +61,4 @@ const Dashboard = () => {
 }
 
 export default Dashboard;
+

@@ -41,6 +41,16 @@ export const getImagesBulk = async (token: string) => {
   return response.data;
 }
 
+export const getImage = async (token: string, imageId: string) => {
+  console.log(imageId);
+  const response = await axios.get(`${BACKEND_URL}/image/${imageId}`, {
+    headers: {
+      authorization: `Bearer ${token}`  
+    }
+  })
+  return response.data;
+}
+
 export const getPacksBulk = async (token: string) => {
   const response = await axios.get(`${BACKEND_URL}/pack/bulk`, {
     headers: {

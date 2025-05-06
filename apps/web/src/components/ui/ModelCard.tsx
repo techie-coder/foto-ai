@@ -31,7 +31,7 @@ export const ModelCard = ({ modelProps }: { modelProps: Model }) => {
     console.log(modelProps.thumbnailUrl);
     return (
         <>
-            <Card className="flex justify-center items-center overflow-auto dark p-4">
+            <Card className="flex justify-center items-center overflow-auto dark p-4 border-cyan-400 border-2">
                 <div className="w-[250px] h-[250px]"><Image src={modelProps.thumbnailUrl} width={250} height={250} alt="model thumbnail" className="w-full h-full object-cover rounded-md" /></div>
                 <CardHeader className="flex flex-col gap-2 text-white w-full">
                     <CardTitle>{modelProps.name}</CardTitle>

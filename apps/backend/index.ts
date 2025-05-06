@@ -252,6 +252,23 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
     })
 });
 
+app.get("/image/:id", authMiddleware, async (req, res) => {
+    const imageId = req.params.id;
+    try{
+    const image = await prismaClient.outputImages.findUnique({
+        where: {
+            id: imageId
+        }});
+    res.json({
+        image
+    })
+    }catch(e){
+        res.json({
+            error: "Error fetching image"
+        })
+    }   
+})
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
