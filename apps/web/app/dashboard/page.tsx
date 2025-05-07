@@ -9,6 +9,7 @@ import { getImagesBulk } from "@/lib/api"
 import { RedirectToSignIn, SignedOut, SignedIn, useAuth } from "@clerk/nextjs"
 import type { OutputImages } from "common/inferred"
 import { Gallery } from "@/components/Gallery"
+import { Skeleton } from "@/components/ui/skeleton"
 import { SkeletonDemo } from "@/components/ui/SkeletonDemo"
 
 const Dashboard = () => {
@@ -40,7 +41,7 @@ const Dashboard = () => {
                                 <Button
                                     key={item}
                                     onClick={() => setMenuBar(item)}
-                                    className="bg-neutral-700"
+                                    className={item === menuBar ? "bg-neutral-700 hover:bg-neutral-700" : "bg-neutral-900 hover:bg-neutral-900"}
                                 >
                                     {item}
                                 </Button>
@@ -49,7 +50,7 @@ const Dashboard = () => {
                         {menuBar === "Create Model" && <CreateModel onCancel={() => setMenuBar("")} />}
                         {menuBar === "Generate" && <Models />}
                         {menuBar === "Packs" && <Packs />}
-                        {menuBar === "Gallery" && (loading ? <SkeletonDemo /> : <Gallery images={images} />)}
+                        {menuBar === "Gallery" && (loading ? (<div className="h-[80vh] flex flex-col justify-center items-start gap-3"><Skeleton className="h-12 w-12 rounded-full dark" /><Skeleton className="w-[20vw] h-8 dark" /><Skeleton className="w-[16vw] h-8 dark" /></div>) : <Gallery images={images} />)}
                     </div>
                 </div>
             </SignedIn>

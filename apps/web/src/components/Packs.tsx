@@ -3,7 +3,7 @@ import { useAuth } from "@clerk/nextjs";
 import { getPacksBulk, getModels } from "@/lib/api";
 import type { Pack, Model } from "common/inferred";
 import { PackCard } from "./ui/PackCard";
-import { SkeletonDemo } from "./ui/SkeletonDemo";
+import { Skeleton } from "./ui/skeleton";
 
 export const Packs = () => {
     const { getToken } = useAuth();
@@ -32,13 +32,15 @@ export const Packs = () => {
         handleGetModels();
     }, [])
 
-    if (loading) return <SkeletonDemo />
 
     return (
         <div className="grid grid-cols-3 gap-5 w-[90dvw] h-full p-4 overflow-auto">
-            {packs.map((pack, index) => (
-                <PackCard key={index} PackProps={pack} models={models} />
-            ))}
+            {loading ? <Skeleton className="w-full h-full" /> :
+                (
+                    packs.map((pack, index) => (
+                        <PackCard key={index} PackProps={pack} models={models} />
+                    ))
+                )}
         </div>
     )
 }

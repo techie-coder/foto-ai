@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.18.5",
+    "@flaticon/flaticon-uicons": "^3.3.1",
     "@radix-ui/react-label": "^2.1.4",
     "@radix-ui/react-menubar": "^1.1.12",
     "@radix-ui/react-navigation-menu": "^1.2.10",
