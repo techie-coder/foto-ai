@@ -45,7 +45,7 @@ export const Models = () => {
         setAlert(true);
         setTimeout(() => {
             setAlert(false);
-        }, 3000);
+        }, 5000);
         console.log("Response from generate image", response);
     }
 
