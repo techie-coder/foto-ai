@@ -5,7 +5,6 @@ import { FalAIModel } from './models/FalAIModel';
 import { S3Client } from 'bun';
 import cors from 'cors';
 import { authMiddleware } from './middleware/authMiddleware';
-import { falMiddleware } from './middleware/falMiddleware';
 
 const PORT = process.env.PORT || 8080;
 const app = express();
@@ -41,7 +40,7 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
         return 
     }
     
-    const {request_id, response_url, zipUrl} = await falAiModel.trainModel(parsedBody.data.zipUrl, parsedBody.data.name)
+    const {request_id, response_url } = await falAiModel.trainModel(parsedBody.data.zipUrl, parsedBody.data.name)
 
     
     const data = await prismaClient.model.create({
@@ -60,8 +59,7 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
 
     res.json({
         request_id,
-        response_url,
-        zipUrl
+        response_url
     })
 })
 
@@ -148,7 +146,7 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
             userId: req.userId,
             modelId: parsedBody.data.modelId,
             imageUrl: "",
-            falAiReuestId: request_id[index].request_id,
+            falAiReuestId: request_id[index]?.request_id,
         }))
     });
 
@@ -178,7 +176,10 @@ app.get("/image/bulk", authMiddleware, async (req, res) => {
 
     const imagesData = await prismaClient.outputImages.findMany({
         where: {
-            userId: req.userId
+            userId: req.userId,
+            status: {
+                not: "Failed"
+            }
         },
         skip: parseInt(offset),
         take: parseInt(limit)
@@ -215,18 +216,46 @@ app.get("/ai/models", authMiddleware, async (req, res) => {
 
 app.post("/fal-ai/webhook/train", async (req, res) => {
     const request_id = req.body.request_id as string;
+    console.log(req.body);
+    const result = await falAiModel.fetchRequestData(request_id);
+    if(!result){
+        res.status(411).json({
+            message: "Error fetching request data"
+        })
+        return
+    }
+
+    const model = await prismaClient.model.findMany({
+        where: {
+            falAiReuestId: request_id
+        }
+    });
+    
+    const triggerWord = model[0]?.triggerWord;
+     //@ts-ignore
+    if(!result.data.diffusers_lora_file || !triggerWord){
+        res.status(411).json({
+            message: "Error fetching request data"
+        })
+        return
+    }
+     //@ts-ignore
+    const { imageUrl } = await falAiModel.generateImageSync(result.data.diffusers_lora_file.url, triggerWord);
+
     await prismaClient.model.updateMany({
         where:{
             falAiReuestId: request_id
         },
         data: {
             trainingStatus: "Completed",
-            tensorPath: req.body.tensor_path
+            //@ts-ignore
+            tensorPath: result.data.diffusers_lora_file.url,
+            thumbnailUrl: imageUrl,
         }
     })
     res.json({
         message: "Training completed"
-    })    
+    })       
 });
 
 app.post("/fal-ai/webhook/image", async (req, res) => {
@@ -234,8 +263,7 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
     console.log(req.body);
     if (req.body.status === "OK") {
         if(req.body.payload.images) {
-        const images = req.body.payload.images;
-        const imageUrl = images[0].url;
+        const imageUrl = req.body.payload.images[0].url;
         await prismaClient.outputImages.updateMany({
             where:{
                 falAiReuestId: request_id

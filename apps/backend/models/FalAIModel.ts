@@ -40,7 +40,16 @@ export class FalAIModel extends BaseModel {
 
     public async trainModel(zipUrl: string, triggerWord: string) {
         // Implementation for training the FalAI model
-        /*
+        if(!zipUrl || !triggerWord) {
+            throw new Error("Either zipUrl or triggerWord is missing");
+        }
+        if (!process.env.WEBHOOK_BASE_URL) {
+            throw new Error("WEBHOOK_BASE_URL is not set");
+        }
+        if(zipUrl.length <= 0 || triggerWord.length <= 0){
+            throw new Error("zipUrl or triggerWord is empty");
+        }
+        // Submit the training job to FalAI
         console.log(`Training model with input images: ${zipUrl} and trigger word: ${triggerWord}`);
         const { request_id, response_url } = await fal.queue.submit("fal-ai/flux-lora-fast-training", {
             input: {
@@ -50,8 +59,6 @@ export class FalAIModel extends BaseModel {
             webhookUrl: `${process.env.WEBHOOK_BASE_URL}/fal-ai/webhook/train`,
           });
         return { request_id, response_url };
-        */
-        return { request_id: "", response_id: "", zipUrl };
     }
 
     public async fetchRequestData(requestId: string) {
@@ -68,5 +75,17 @@ export class FalAIModel extends BaseModel {
           console.log("Error fetching request data", e);
           return null;
         }
+    }
+
+    public async generateImageSync(tensorPath: string, triggerWord: string) {
+      const response = await fal.subscribe("fal-ai/flux-lora", {
+        input: {
+          prompt: `A handsome man with my face holding a cup of coffee, dressed in a soft knit sweater, sitting on a couch surrounded by warm-toned pillows and fairy lights, studio setting with diffused lighting, relaxed and confident expression, high-resolution photorealism ${triggerWord}`,
+          loras: [{path: tensorPath, scale: 1}],
+        }
+      });
+      return {
+        imageUrl: response.data.images[0]?.url || "",
+      }
     }
 }

@@ -2,13 +2,13 @@ import type { FluxLoraOutput } from "@fal-ai/client/endpoints";
 
 export class BaseModel {
     constructor(){}
-        private async generateImage(prompt: string, tensorPath: string) : Promise<{ request_id: string }> {
+        public async generateImage(prompt: string, tensorPath: string) : Promise<{ request_id: string }> {
             return { request_id: "" };
         }
-        private async trainModel(zipUrl: string, triggerWord: string) : Promise<{ request_id: string, response_url: string, zipUrl: string }> {
-            return { request_id: "", response_url: "", zipUrl: "" };
+        public async trainModel(zipUrl: string, triggerWord: string) : Promise<any> {
+            return { request_id: "", response_id: "", zipUrl: "" };
         }
-        private async fetchRequestData(requestId: string) : Promise<FluxLoraOutput> {
+        public async fetchRequestData(requestId: string) : Promise<any> {
             return {
                 
                     images: [],
@@ -18,5 +18,11 @@ export class BaseModel {
                     prompt: ""
                 
             }
+        
+    }
+    public async generateImageSync(tensorPath: string, triggerWord: string) : Promise<{ imageUrl: string }> {
+        return {
+            imageUrl: ""
+        }
     }
 }
