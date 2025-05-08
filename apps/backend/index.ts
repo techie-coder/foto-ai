@@ -39,7 +39,26 @@ app.post("/ai/training", authMiddleware, async (req, res) => {
         })
         return 
     }
-    
+    const userId = req.userId;
+    const user = await prismaClient.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+
+    if(!user){
+        res.status(411).json({
+            "message": "User not found!"
+        })
+        return
+    }
+
+    if(user && user.credits < 2){
+        res.json({
+            message: "Not enough credits"
+        })
+    }
+
     const {request_id, response_url } = await falAiModel.trainModel(parsedBody.data.zipUrl, parsedBody.data.name)
 
     
@@ -73,6 +92,25 @@ app.post("/ai/generate", authMiddleware, async (req, res) => {
         return
     }
     try{
+        const userId = req.userId;
+        const user = await prismaClient.user.findUnique({
+            where: {
+                id: userId
+            }
+        });
+
+        if(!user){
+            res.status(411).json({
+                "message": "User not found!"
+            })
+            return
+        }
+
+        if(user && user.credits < 2){
+            res.json({
+                message: "Not enough credits"
+            })
+        }
         const model = await prismaClient.model.findUnique({
             where: {
                 id: parsedBody.data.modelId
@@ -118,6 +156,25 @@ app.post("/pack/generate", authMiddleware, async (req, res) => {
             "message": "Input incorrect!"
         })
         return
+    }
+    const userId = req.userId;
+    const user = await prismaClient.user.findUnique({
+        where: {
+            id: userId
+        }
+    });
+
+    if(!user){
+        res.status(411).json({
+            "message": "User not found!"
+        })
+        return
+    }
+
+    if(user && user.credits < 2){
+        res.json({
+            message: "Not enough credits"
+        })
     }
     const prompts = await prismaClient.packPrompts.findMany({
         where: {
@@ -279,6 +336,30 @@ app.post("/fal-ai/webhook/image", async (req, res) => {
         image_url : req.body.payload.images[0].url,
     })
 });
+
+app.post("/clerk/webhook", async (req, res) => {
+    const { type, id } = req.body;
+    if(type === "user.created"){
+       try{ 
+       const user = await prismaClient.user.create({
+            data: {
+                id: id,
+                username: "",
+                credits: 0,
+            }
+       })
+       console.log("User created", user);
+       res.json({
+            message: "User created"
+        })
+    }catch(e){
+        console.log("Error creating user", e);
+        res.json({
+            message: "Error creating user"
+        })
+    }
+}
+})
 
 app.get("/image/:id", authMiddleware, async (req, res) => {
     const imageId = req.params.id;

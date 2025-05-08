@@ -45,6 +45,7 @@ model User {
   profilePicture String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+  credits        Float    @default(0.00)
 }
 
 model Model {

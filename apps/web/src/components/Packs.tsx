@@ -34,13 +34,12 @@ export const Packs = () => {
 
 
     return (
-        <div className="grid grid-cols-3 gap-5 w-[90dvw] h-full p-4 overflow-auto">
-            {loading ? <Skeleton className="w-full h-full" /> :
-                (
-                    packs.map((pack, index) => (
-                        <PackCard key={index} PackProps={pack} models={models} />
-                    ))
-                )}
-        </div>
+        <>
+            {loading ? (<div className="h-[80vh] flex flex-col justify-center items-start gap-3"><Skeleton className="h-12 w-12 rounded-full dark" /><Skeleton className="w-[20vw] h-8 dark" /><Skeleton className="w-[16vw] h-8 dark" /></div>) : (
+                <div className="grid grid-cols-3 gap-5 w-[90dvw] h-full p-4 overflow-auto">
+                    {packs.map((pack, index) => (
+                        <PackCard key={index} PackProps={pack} models={models} />))}
+                </div>)}
+        </>
     )
 }

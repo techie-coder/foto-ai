@@ -1,14 +1,20 @@
 FROM oven/bun:latest
 
+ENV PRISMA_SKIP_POSTINSTALL_GENERATE=true
+
 WORKDIR /app
 
 COPY . .
 
-RUN bun install
+RUN bun install --ignore-scripts
+
+WORKDIR /app/packages/db
+
+RUN bunx prisma generate
 
 WORKDIR /app/apps/backend
 
-RUN bunx prisma generate && bun install
+RUN bun install
 
 EXPOSE 8080
 
