@@ -20,7 +20,7 @@ export const Packs = () => {
             setLoading(false);
         }
         getPacks();
-    }, [])
+    }, []);
 
     useEffect(() => {
         const handleGetModels = async () => {
@@ -30,16 +30,23 @@ export const Packs = () => {
             setModels(response.models);
         }
         handleGetModels();
-    }, [])
-
+    }, []);
 
     return (
         <>
-            {loading ? (<div className="h-[80vh] flex flex-col justify-center items-start gap-3"><Skeleton className="h-12 w-12 rounded-full dark" /><Skeleton className="w-[20vw] h-8 dark" /><Skeleton className="w-[16vw] h-8 dark" /></div>) : (
-                <div className="grid grid-cols-3 gap-5 w-[90dvw] h-full p-4 overflow-auto">
+            {loading ? (
+                <div className="h-[80vh] flex flex-col justify-center items-start gap-3">
+                    <Skeleton className="h-12 w-12 rounded-full dark" />
+                    <Skeleton className="w-[70vw] md:w-[30vw] h-8 dark" />
+                    <Skeleton className="w-[50vw] md:w-[10vw] h-8 dark" />
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 w-full p-10 overflow-auto">
                     {packs.map((pack, index) => (
-                        <PackCard key={index} PackProps={pack} models={models} />))}
-                </div>)}
+                        <PackCard key={index} PackProps={pack} models={models} />
+                    ))}
+                </div>
+            )}
         </>
-    )
-}
+    );
+};

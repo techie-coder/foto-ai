@@ -67,7 +67,9 @@ export const OutputImages = z.object({
   prompt: z.string(),
   status: z.enum(["Pending", "Completed", "Failed"]),
   Model: trainModel,         
-  falAiReuestId: z.string() 
+  falAiReuestId: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string(), 
 })
 
 export const PackPrompt = z.object({

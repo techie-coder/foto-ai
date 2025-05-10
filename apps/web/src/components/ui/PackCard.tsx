@@ -1,29 +1,26 @@
 import type { Pack, Model } from 'common/inferred';
 import Image from 'next/image';
-import { generateImage } from '@/lib/api';
+import { generatePack } from '@/lib/api';
 import { useAuth } from '@clerk/nextjs';
 import { useState } from 'react';
 import { ClickableImage } from './ClickableImage';
-export const PackCard = ({ PackProps, models }: { PackProps: Pack, models: Model[] }) => {
 
+export const PackCard = ({ PackProps, models }: { PackProps: Pack, models: Model[] }) => {
     const [generate, setGenerate] = useState<boolean>(false);
     const [currentModel, setCurrentModel] = useState<Model>({} as Model);
     const { getToken } = useAuth();
 
     const handleSubmit = async () => {
-        if (!models) return;
-        if (!generate) return;
+        if (!models || !generate || !currentModel.id) return;
         const token = await getToken();
-        if (token) {
-            const input = {
-                prompt: PackProps.name,
-                modelId: currentModel.id,
-                num: 1
-            }
-            const response = await generateImage(input, token);
-            console.log("Response from model", response);
-        }
-    }
+        if (!token) return;
+        const input = {
+            packId: PackProps.id,
+            modelId: currentModel.id,
+        };
+        const response = await generatePack(token, input);
+        console.log("Response from generate image", response);
+    };
 
     return (
         <div className="flex flex-col gap-2 p-4 justify-center items-center bg-zinc-900 rounded-lg border border-cyan-400">
@@ -36,14 +33,28 @@ export const PackCard = ({ PackProps, models }: { PackProps: Pack, models: Model
                 {generate && (
                     <>
                         <p className='text-sm text-white text-start'>Choose model :</p>
-                        <div className='grid grid-cols-5 gap-2 justify-center items-center w-full h-full'>
+                        <div className='grid grid-cols-4 gap-2 justify-center items-center w-full h-full'>
                             {models.length > 0 && models.map((model, index) => (
-                                <ClickableImage key={index} modelProps={model} handleModel={() => setCurrentModel(model)} />
+                                <ClickableImage
+                                    key={index}
+                                    modelProps={model}
+                                    isSelected={currentModel.id === model.id}
+                                    handleModel={(m) => setCurrentModel(m)}
+                                />
                             ))}
                         </div>
-                    </>)}
-                <button className='bg-black border border-cyan-400 text-white rounded-md w-24 p-2' onClick={() => { setGenerate(true); handleSubmit(); }}>Generate</button>
+                    </>
+                )}
+                <button
+                    className='bg-black border border-cyan-400 text-white rounded-md w-24 p-2'
+                    onClick={() => {
+                        setGenerate(true);
+                        handleSubmit();
+                    }}
+                >
+                    Generate
+                </button>
             </div>
         </div>
-    )
-}
+    );
+};

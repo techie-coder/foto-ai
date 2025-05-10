@@ -17,11 +17,11 @@ export const Appbar = () => {
             </div>
             <div className='flex justify-between flex-row gap-10 text-sm text-white'>
                 <div className="h-full group">
-                    <Link href="/dashboard" className='block'>Get Started</Link>
+                    <Link href="/dashboard/generate" className='block'>Get Started</Link>
                     <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
                 </div>
                 <div className="h-full group">
-                    <Link href="/gallery" className='block'>Gallery</Link>
+                    <Link href="/dashboard/gallery" className='block'>Gallery</Link>
                     <div className='h-[0.1vh] bg-white w-0 opacity-0 group-hover:opacity-100 group-hover:w-full transition-[width,opacity] duration-500 mt-1' />
                 </div>
                 <div className="h-full group">
