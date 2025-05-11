@@ -7,7 +7,7 @@ import { Gallery } from "@/components/Gallery"
 import { MenuBar } from "@/components/ui/MenuBar"
 import { useRouter } from "next/navigation"
 
-export function Dashboard({ params, }: { params: { slug: string } }) {
+export default function Dashboard({ params, }: { params: { slug: string } }) {
 
     const router = useRouter();
 
@@ -32,6 +32,4 @@ export function Dashboard({ params, }: { params: { slug: string } }) {
         </>
     )
 }
-
-export default Dashboard;
 
