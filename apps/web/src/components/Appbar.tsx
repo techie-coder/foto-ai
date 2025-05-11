@@ -13,7 +13,7 @@ export const Appbar = () => {
     return (
         <div className="absolute z-100 bg-transparent flex flex-row justify-between items-center p-4 border-neutral-700 w-full h-[10vh]">
             <div className='text-xl text-white font-bold h-full'>
-                <Link href="/">foto-ai</Link>
+                <Link href="/">zeus</Link>
             </div>
             <div className='flex justify-between flex-row gap-10 text-sm text-white'>
                 <div className="h-full group">
