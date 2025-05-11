@@ -6,12 +6,20 @@ import { RedirectToSignIn, SignedOut, SignedIn } from "@clerk/nextjs"
 import { Gallery } from "@/components/Gallery"
 import { MenuBar } from "@/components/ui/MenuBar"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
-export default function Dashboard({ params, }: { params: { slug: string } }) {
+export default function Dashboard({ params, }: { params: Promise<{ slug: string }> }) {
 
     const router = useRouter();
 
-    const slug = params.slug;
+    const [slug, setSlug] = useState<string>("");
+    useEffect(() => {
+        const getSlug = async () => {
+            const slug = await params;
+            setSlug(slug.slug);
+        }
+        getSlug();
+    }, [])
 
     return (
         <>
